@@ -32,7 +32,7 @@ void Bulb::on_off_switch(int state){
 
 
 
-Lights::Lights(std::vector<Bulb> bulbs){
+Lights::Lights(const std::vector<Bulb> &bulbs){
     this->bulbs = bulbs;
 }
 
