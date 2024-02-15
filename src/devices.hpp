@@ -11,6 +11,7 @@
 class Phone{
     public:
         Phone(std::string bluetooth_mac, std::string wifi_mac);
+        ~Phone();
         
         bool get_wifi_connection();
         bool get_bluetooth_discoverable();
@@ -26,6 +27,7 @@ class Phone{
         int bluetooth_discoverable; // 0 is not in proximity, 1 is
         bdaddr_t* bluetooth_mac;
         std::string wifi_mac;
+        int dd;
 };
 
 class Bulb{
@@ -35,6 +37,7 @@ class Bulb{
         void on_off_switch(int state);
 
     private:
+        tuyaAPI33 tuya;
         int switch_led_code;
         std::string id;
         std::string key;

@@ -1,10 +1,15 @@
 #include "devices.hpp"
 
-Phone::Phone(std::string bluetooth_mac, std::string wifi_mac){
+Phone::Phone(std::string bluetooth_mac_str, std::string wifi_mac){
     this->wifi_connection = 0;
     this->bluetooth_discoverable = 0;
-    str2ba(bluetooth_mac.c_str(), this->bluetooth_mac);
+    str2ba(bluetooth_mac_str.c_str(), this->bluetooth_mac);
     this->wifi_mac = wifi_mac;
+    this->dd = hci_open_dev(hci_get_route(NULL));
+}
+
+Phone::~Phone(){
+    hci_close_dev(this->dd);
 }
 
 bool Phone::get_wifi_connection(){
@@ -29,7 +34,7 @@ int Phone::wifi_checker(){
 }
 
 int Phone::bluetooth_checker(){
-    int dd = hci_open_dev(hci_get_route(NULL));
+    int &dd = this->dd;
 
     // see whether a phone is in bluetooth proximity or not
     if (hci_read_remote_name(dd, this->bluetooth_mac, 0, NULL, 25000) == 0){

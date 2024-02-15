@@ -9,7 +9,7 @@ Bulb::Bulb(std::string id, std::string key, std::string ip, int switch_led_code)
 
 void Bulb::on_off_switch(int state){
     std::stringstream payload;
-    tuyaAPI33 tuya;
+    tuyaAPI33 &tuya = this->tuya;
     unsigned char buffer[1024];
     std::string bool_state;
 
