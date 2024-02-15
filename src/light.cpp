@@ -26,6 +26,7 @@ void Bulb::on_off_switch(int state){
     int command_len = tuya.BuildTuyaMessage(buffer, TUYA_CONTROL, payload.str(), this->key);
     tuya.ConnectToDevice(this->ip, PORT);
     tuya.send(buffer, command_len);
+    tuya.disconnect();
 }
 
 
