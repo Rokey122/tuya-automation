@@ -12,7 +12,7 @@ class Bulb{
         void on_off_switch(int state);
 
     private:
-        tuyaAPI33 tuya;
+        tuyaAPI33 *tuya;
         int switch_led_code;
         std::string id;
         std::string key;

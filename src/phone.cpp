@@ -1,4 +1,4 @@
-#include "devices.hpp"
+#include "phone.hpp"
 
 Phone::Phone(std::string bluetooth_mac_str, std::string wifi_mac){
     this->wifi_connection = 0;
