@@ -1,4 +1,4 @@
-#include "light.hpp"
+#include "../header/light.hpp"
 
 Bulb::Bulb(std::string id, std::string key, std::string ip, int switch_led_code){
     this->id = id;

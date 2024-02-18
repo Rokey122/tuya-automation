@@ -1,7 +1,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "tuyaAPI33.hpp"
+#include "../deps/tuyapp/src/tuyaAPI33.hpp"
 
 #define PORT 6668
 
