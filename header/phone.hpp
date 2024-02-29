@@ -2,6 +2,7 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/hci.h>
 #include <bluetooth/hci_lib.h>
+#include <thread>
 #include "../header/network.hpp"
 #include "../deps/PcapPlusPlus/Common++/header/IpAddress.h"
 #include "../deps/PcapPlusPlus/Pcap++/header/PcapLiveDevice.h"
@@ -19,9 +20,11 @@ class Phone{
         void change_wifi_connection(int val);
         void change_bluetooth_discoverable(int val);
 
-        int wifi_checker(std::string ip);
+        int wifi_checker(std::string ip, std::string iface);
         int bluetooth_checker();
 
+        void start_host_discovery();
+        void stop_host_discovery();
 
     private:
         int wifi_connection; // 0 is not connected to LAN, 1 is
@@ -29,4 +32,13 @@ class Phone{
         bdaddr_t *bluetooth_mac = new bdaddr_t;
         std::string wifi_mac;
         int dd;
+
+        double pcap_response = 0.0;
+        int pcap_timeout = 1;
+        pcpp::PcapLiveDevice *pcap_dev;
+        pcpp::MacAddress pcap_source_mac;
+        pcpp:: IPv4Address pcap_source_ip;
+
+        bool host_discovery_terminate = false;
+        std::vector<std::string> hosts;
 };

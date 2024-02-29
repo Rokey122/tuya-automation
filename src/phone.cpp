@@ -6,11 +6,16 @@ Phone::Phone(std::string bluetooth_mac_str, std::string wifi_mac){
     str2ba(bluetooth_mac_str.c_str(), this->bluetooth_mac);
     this->wifi_mac = wifi_mac;
     this->dd = hci_open_dev(hci_get_route(NULL));
+
+    this->pcap_dev = pcpp::PcapLiveDeviceList::getInstance().getPcapLiveDeviceByIpOrName(get_interface());
+    this->pcap_source_mac = this->pcap_dev->getMacAddress();
+    this->pcap_source_ip = this->pcap_dev->getIPv4Address();
 }
 
 Phone::~Phone(){
     hci_close_dev(this->dd);
     delete this->bluetooth_mac;
+    this->stop_host_discovery();
 }
 
 bool Phone::get_wifi_connection(){
@@ -29,30 +34,22 @@ void Phone::change_bluetooth_discoverable(int val){
     this->bluetooth_discoverable = val;
 }
 
-int Phone::wifi_checker(std::string ip){
-    int timeout = 10;
-    double response = 0.0;
-
-    pcpp::PcapLiveDevice *dev = pcpp::PcapLiveDeviceList::getInstance().getPcapLiveDeviceByIpOrName(get_interface());
-    dev->open();
-
-    pcpp::MacAddress source_mac = dev->getMacAddress();
-    pcpp:: IPv4Address source_ip = dev->getIPv4Address();
+int Phone::wifi_checker(std::string ip, std::string iface){
+    this->pcap_dev->open();
     pcpp::IPv4Address target_ip = pcpp::IPv4Address(ip);
-
-    pcpp::MacAddress result = pcpp::NetworkUtils::getInstance().getMacAddress(target_ip, dev, response, source_mac, source_ip, timeout);
+    pcpp::MacAddress result = pcpp::NetworkUtils::getInstance().getMacAddress(target_ip, this->pcap_dev, this->pcap_response, this->pcap_source_mac, this->pcap_source_ip, this->pcap_timeout);
 
     if (result == this->wifi_mac){
         if (this->wifi_connection != 1){this->wifi_connection = 1;}
-        dev->close();
+        this->pcap_dev->close();
         return 1;
     }
     else{
         if (this->wifi_connection != 0){this->wifi_connection = 0;}
-        dev->close();
+        this->pcap_dev->close();
         return 0;
     }
-    dev->close();
+    this->pcap_dev->close();
     return -1;
 }
 
@@ -69,4 +66,16 @@ int Phone::bluetooth_checker(){
         return 0;
     }
     return -1;
+}
+
+void Phone::start_host_discovery(){
+    std::string ip_base = get_ip_base();
+    for (int num = 0; num < 256; num++){
+        std::thread t(online_devices, ip_base + std::to_string(num), &this->hosts, &this->host_discovery_terminate);
+        t.detach();
+    }
+}
+
+void Phone::stop_host_discovery(){
+    this->host_discovery_terminate = true;
 }
