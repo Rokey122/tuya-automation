@@ -62,3 +62,16 @@ void online_devices(std::string ip, std::vector<std::string> *hosts, bool *termi
     }
 }
 
+
+void start_host_discovery(bool *terminated, std::vector<std::string> *hosts){
+    std::string ip_base = get_ip_base();
+    for (int num = 0; num < 256; num++){
+        std::thread t(online_devices, ip_base + std::to_string(num), &hosts, &terminated);
+        t.detach();
+    }
+}
+
+void stop_host_discovery(bool *terminated){
+    *terminated = true;
+}
+

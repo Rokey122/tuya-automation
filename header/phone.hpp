@@ -23,9 +23,6 @@ class Phone{
         int wifi_checker(std::string ip, std::string iface);
         int bluetooth_checker();
 
-        void start_host_discovery();
-        void stop_host_discovery();
-
     private:
         int wifi_connection; // 0 is not connected to LAN, 1 is
         int bluetooth_discoverable; // 0 is not in proximity, 1 is
@@ -38,7 +35,4 @@ class Phone{
         pcpp::PcapLiveDevice *pcap_dev;
         pcpp::MacAddress pcap_source_mac;
         pcpp:: IPv4Address pcap_source_ip;
-
-        bool host_discovery_terminate = false;
-        std::vector<std::string> hosts;
 };

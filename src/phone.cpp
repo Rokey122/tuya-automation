@@ -15,7 +15,6 @@ Phone::Phone(std::string bluetooth_mac_str, std::string wifi_mac){
 Phone::~Phone(){
     hci_close_dev(this->dd);
     delete this->bluetooth_mac;
-    this->stop_host_discovery();
 }
 
 bool Phone::get_wifi_connection(){
@@ -66,16 +65,4 @@ int Phone::bluetooth_checker(){
         return 0;
     }
     return -1;
-}
-
-void Phone::start_host_discovery(){
-    std::string ip_base = get_ip_base();
-    for (int num = 0; num < 256; num++){
-        std::thread t(online_devices, ip_base + std::to_string(num), &this->hosts, &this->host_discovery_terminate);
-        t.detach();
-    }
-}
-
-void Phone::stop_host_discovery(){
-    this->host_discovery_terminate = true;
 }
