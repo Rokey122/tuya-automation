@@ -3,6 +3,9 @@
 #include <vector>
 #include "../deps/tuyapp/src/tuyaAPI33.hpp"
 
+#ifndef LIGHTS
+#define LIGHTS
+
 #define PORT 6668
 
 class Bulb{
@@ -12,7 +15,6 @@ class Bulb{
         void on_off_switch(int state);
 
     private:
-        tuyaAPI33 *tuya;
         int switch_led_code;
         std::string id;
         std::string key;
@@ -33,3 +35,4 @@ class Lights{
         std::vector <Bulb> bulbs;
         int state; // 0 is off, 1 is on
 };
+#endif

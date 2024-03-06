@@ -10,6 +10,8 @@
 #include "../deps/PcapPlusPlus/Common++/header/MacAddress.h"
 #include "../deps/PcapPlusPlus/Pcap++/header/NetworkUtils.h"
 
+#ifndef PHONE
+#define PHONE
 class Phone{
     public:
         Phone(std::string bluetooth_mac, std::string wifi_mac);
@@ -28,6 +30,7 @@ class Phone{
         int bluetooth_discoverable; // 0 is not in proximity, 1 is
         bdaddr_t *bluetooth_mac = new bdaddr_t;
         std::string wifi_mac;
+
         int dd;
 
         double pcap_response = 0.0;
@@ -36,3 +39,4 @@ class Phone{
         pcpp::MacAddress pcap_source_mac;
         pcpp:: IPv4Address pcap_source_ip;
 };
+#endif
