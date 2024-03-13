@@ -31,10 +31,9 @@ void Bulb::on_off_switch(int state){
 
 
 
-
-
 Lights::Lights(const std::vector<Bulb> &bulbs){
     this->bulbs = bulbs;
+    this->state = 0;
 }
 
 int Lights::get_state(){
@@ -46,9 +45,10 @@ void Lights::change_state(int val){
 }
 
 void Lights::on_off_switch(int state){
-    for(auto bulb : this->bulbs){
-        bulb.on_off_switch(state);
+    if (this->state != state){
+        for(auto bulb : this->bulbs){
+            bulb.on_off_switch(state);
+        }
+        this->change_state(state);
     }
-    this->change_state(state);
 }
-

@@ -33,6 +33,6 @@ class Lights{
     
     private:
         std::vector <Bulb> bulbs;
-        int state; // 0 is off, 1 is on
+        int state;
 };
 #endif
