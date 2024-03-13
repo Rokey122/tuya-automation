@@ -1,0 +1,15 @@
+[
+    {
+        "id" : "device id",
+        "key" : "secret key",
+        "ip" : "ip",
+        "switch_led_code" : 20
+    },
+    
+    {
+        "id" : "device id",
+        "key" : "secret key",
+        "ip" : "ip",
+        "switch_led_code" : 20
+    }
+]
