@@ -36,8 +36,7 @@ void Phone::change_bluetooth_discoverable(int val){
 int Phone::wifi_checker(std::string ip, std::string iface){
     this->pcap_dev->open();
     pcpp::IPv4Address target_ip = pcpp::IPv4Address(ip);
-    pcpp::MacAddress result = pcpp::NetworkUtils::getInstance().getMacAddress(target_ip, this->pcap_dev, this->pcap_response, this->pcap_source_mac, this->pcap_source_ip, this->pcap_timeout);
-
+    pcpp::MacAddress result = pcpp::NetworkUtils::getInstance().getMacAddress(target_ip, this->pcap_dev, this->pcap_response, this->pcap_source_mac, this->pcap_source_ip, 120);
     if (result == this->wifi_mac){
         if (this->wifi_connection != 1){this->wifi_connection = 1;}
         this->pcap_dev->close();
@@ -50,6 +49,15 @@ int Phone::wifi_checker(std::string ip, std::string iface){
     }
     this->pcap_dev->close();
     return -1;
+}
+
+int Phone::multi_wifi_checker(std::vector<std::string> &hosts, std::string iface){
+    for (auto host : hosts){
+        if (this->wifi_checker(host, iface) == 1){
+            return 1;
+        }
+    }
+    return 0;
 }
 
 int Phone::bluetooth_checker(){
