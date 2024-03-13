@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "../header/phone.hpp"
-#include "../header/light.hpp"
+#include "phone.hpp"
+#include "light.hpp"
 
 Phone jsonparse_phone();
 

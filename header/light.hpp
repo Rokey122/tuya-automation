@@ -1,7 +1,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "../deps/tuyapp/src/tuyaAPI33.hpp"
+#include "tuyaAPI33.hpp"
 
 #ifndef LIGHTS
 #define LIGHTS

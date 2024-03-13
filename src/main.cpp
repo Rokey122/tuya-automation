@@ -1,7 +1,7 @@
-#include "../header/light.hpp"
-#include "../header/phone.hpp"
-#include "../header/json.hpp"
-#include "../header/network.hpp"
+#include "light.hpp"
+#include "phone.hpp"
+#include "json.hpp"
+#include "network.hpp"
 #include <cstdlib>
 #include <csignal>
 #include <iostream>

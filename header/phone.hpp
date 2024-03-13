@@ -3,12 +3,12 @@
 #include <bluetooth/hci.h>
 #include <bluetooth/hci_lib.h>
 #include <thread>
-#include "../header/network.hpp"
-#include "../deps/PcapPlusPlus/Common++/header/IpAddress.h"
-#include "../deps/PcapPlusPlus/Pcap++/header/PcapLiveDevice.h"
-#include "../deps/PcapPlusPlus/Pcap++/header/PcapLiveDeviceList.h"
-#include "../deps/PcapPlusPlus/Common++/header/MacAddress.h"
-#include "../deps/PcapPlusPlus/Pcap++/header/NetworkUtils.h"
+#include "network.hpp"
+#include "IpAddress.h"
+#include "PcapLiveDevice.h"
+#include "PcapLiveDeviceList.h"
+#include "MacAddress.h"
+#include "NetworkUtils.h"
 
 #ifndef PHONE
 #define PHONE
