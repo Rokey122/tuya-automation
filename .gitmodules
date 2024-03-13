@@ -3,4 +3,4 @@
 	url = https://github.com/gordonb3/tuyapp/
 [submodule "deps/PcapPlusPlus"]
 	path = deps/PcapPlusPlus
-	url = https://github.com/seladb/PcapPlusPlus
+	url = https://github.com/Rokey122/PcapPlusPlus
