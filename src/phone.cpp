@@ -53,7 +53,7 @@ int Phone::wifi_checker(std::string ip, std::string iface){
 
 int Phone::multi_wifi_checker(std::vector<std::string> &hosts, std::string iface){
     for (auto host : hosts){
-        if (this->wifi_checker(host, iface) == 1){
+        if (host.compare(get_ip()) != 0 && this->wifi_checker(host, iface) == 1){
             return 1;
         }
     }

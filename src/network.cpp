@@ -17,7 +17,9 @@ std::string get_interface(){
     return ifa_name;
 }
 
-std::string get_ip_base(){
+
+
+std::string get_ip(){
     struct ifaddrs *ifaddrs;
     struct sockaddr_in *sockaddr;
     std::string ifa_addr;
@@ -32,10 +34,16 @@ std::string get_ip_base(){
         }
     }
 
-    int position = ifa_addr.find_last_of(".") + 1;
-    ifa_addr.erase(position);
     return ifa_addr;
 }
+
+std::string get_ip_base(){
+    std::string ip = get_ip();
+    int position = ip.find_last_of(".") + 1;
+    ip.erase(position);
+    return ip;
+}
+
 
 void online_devices(std::string ip, std::vector<std::string> *hosts, bool *terminated){
     int sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -62,7 +70,6 @@ void online_devices(std::string ip, std::vector<std::string> *hosts, bool *termi
         sleep(2);
     }
 }
-
 
 void start_host_discovery(bool *terminated, std::vector<std::string> *hosts){
     std::string ip_base = get_ip_base();
