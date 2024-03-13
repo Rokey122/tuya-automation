@@ -1,4 +1,5 @@
 #include "../header/network.hpp"
+
 std::mutex mtx;
 
 std::string get_interface(){
@@ -70,8 +71,3 @@ void start_host_discovery(bool *terminated, std::vector<std::string> *hosts){
         t.detach();
     }
 }
-
-void stop_host_discovery(bool *terminated){
-    *terminated = true;
-}
-

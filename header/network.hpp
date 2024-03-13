@@ -9,10 +9,10 @@
 #include <thread>
 
 std::string get_interface();
-
 std::string get_ip_base();
 
 void online_devices(std::string ip, std::vector<std::string> *hosts, bool *terminated);
-
 void start_host_discovery(bool *terminated, std::vector<std::string> *hosts);
-void stop_host_discovery(bool *terminated);
+
+extern std::mutex mtx;
+
