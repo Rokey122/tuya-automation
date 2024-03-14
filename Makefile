@@ -10,6 +10,8 @@ PCAPLIBS = -lPcap++ -lPacket++ -lCommon++ -lpcap
 BTLIBS = -lbluetooth
 JSONLIBS = -ljsoncpp
 
+PTHREADLIBS = -lpthread
+
 BUILD = build
 
 all: libs program
@@ -17,29 +19,31 @@ all: libs program
 libs:
 	cd deps && make tuyapp_lib && make pcap_lib
 
-light.o: src/light.cpp header/light.hpp
+$(BUILD)/light.o: src/light.cpp header/light.hpp
 	mkdir -p $(BUILD)
 	g++ -c src/light.cpp $(INC) $(TUYAINC) -o $(BUILD)/light.o
 
-phone.o: src/phone.cpp header/phone.hpp
+$(BUILD)/phone.o: src/phone.cpp header/phone.hpp
 	mkdir -p $(BUILD) 
 	g++ -c src/phone.cpp $(INC) $(PCAPINC) -o $(BUILD)/phone.o
 
-network.o: src/network.cpp header/network.hpp
+$(BUILD)/network.o: src/network.cpp header/network.hpp
 	mkdir -p $(BUILD) 
 	g++ -c src/network.cpp -o $(BUILD)/network.o
 
-json.o: src/json.cpp header/json.hpp
+$(BUILD)/json.o: src/json.cpp header/json.hpp
 	mkdir -p $(BUILD) 
 	g++ -c src/json.cpp $(INC) $(PCAPINC) $(TUYAINC) -o $(BUILD)/json.o
 
-main.o: src/main.cpp
+$(BUILD)/main.o: src/main.cpp
 	mkdir -p $(BUILD) 
 	g++ -c src/main.cpp $(INC) $(PCAPINC) $(TUYAINC) -o $(BUILD)/main.o
 
-program: light.o phone.o network.o json.o main.o
+$(BUILD)/tuya-automation: $(BUILD)/light.o $(BUILD)/phone.o $(BUILD)/network.o $(BUILD)/json.o $(BUILD)/main.o
 	mkdir -p $(BUILD)
-	g++ $(BUILD)/light.o $(BUILD)/phone.o $(BUILD)/network.o $(BUILD)/json.o $(BUILD)/main.o $(LIB)/tuya $(LIB)/pcap $(TUYALIBS) $(BTLIBS) $(JSONLIBS) $(PCAPLIBS) -o $(BUILD)/tuya-automation
+	g++ $(BUILD)/light.o $(BUILD)/phone.o $(BUILD)/network.o $(BUILD)/json.o $(BUILD)/main.o $(LIB)/tuya $(LIB)/pcap $(TUYALIBS) $(BTLIBS) $(JSONLIBS) $(PCAPLIBS) $(PTHREADLIBS) -o $(BUILD)/tuya-automation
+
+program: $(BUILD)/tuya-automation
 
 clean:
 	rm -rf $(BUILD)
