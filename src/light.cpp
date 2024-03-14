@@ -11,6 +11,7 @@ void Bulb::on_off_switch(int state){
     std::stringstream payload;
     tuyaAPI33 tuya;
     unsigned char buffer[1024];
+    unsigned char recv_buffer[1024];
     std::string bool_state;
 
     switch (state){
@@ -25,7 +26,14 @@ void Bulb::on_off_switch(int state){
     payload << "{\"devId\":\"" << this->id << "\",\"dps\":{\"" << this->switch_led_code << "\":" << bool_state << "}}";
     int command_len = tuya.BuildTuyaMessage(buffer, TUYA_CONTROL, payload.str(), this->key);
     tuya.ConnectToDevice(this->ip, PORT);
-    tuya.send(buffer, command_len);
+
+    int send = -1;
+    int recv = -1;
+    while (send == -1 && recv == -1){
+    send = tuya.send(buffer, command_len);
+    recv = tuya.receive(recv_buffer, 1023);
+    }
+    
     tuya.disconnect();
 }
 
@@ -49,6 +57,6 @@ void Lights::on_off_switch(int state){
         for(auto bulb : this->bulbs){
             bulb.on_off_switch(state);
         }
-        this->change_state(state);
+        this->state = state;
     }
 }
