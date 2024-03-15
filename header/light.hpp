@@ -1,6 +1,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <unistd.h>
 #include "tuyaAPI33.hpp"
 
 #ifndef LIGHTS
