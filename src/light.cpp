@@ -25,19 +25,16 @@ void Bulb::on_off_switch(int state){
 
     payload << "{\"devId\":\"" << this->id << "\",\"dps\":{\"" << this->switch_led_code << "\":" << bool_state << "}}";
     int command_len = tuya.BuildTuyaMessage(buffer, TUYA_CONTROL, payload.str(), this->key);
-    while (!tuya.ConnectToDevice(this->ip, PORT)){
-        usleep(100);
-    }
 
     int send = -1;
     int recv = -1;
     while (send < 0 || recv < 0){
+	    tuya.ConnectToDevice(this->ip, PORT);
         send = tuya.send(buffer, command_len);
         recv = tuya.receive(recv_buffer, 1023);
+	    tuya.disconnect();
         usleep(100);
     }
-    
-    tuya.disconnect();
 }
 
 
