@@ -16,20 +16,13 @@ class Phone{
     public:
         Phone(std::string bluetooth_mac, std::string wifi_mac);
         ~Phone();
-        
-        bool get_wifi_connection();
-        bool get_bluetooth_discoverable();
-        void change_wifi_connection(int val);
-        void change_bluetooth_discoverable(int val);
 
         int wifi_checker(std::string ip, std::string iface);
-        int multi_wifi_checker(std::vector<std::string> &hosts, std::string iface);
+        int multi_wifi_checker(std::vector<std::string> &hosts, std::string iface, std::vector<std::string> bulb_ips);
 
         int bluetooth_checker();
 
     private:
-        int wifi_connection; // 0 is not connected to LAN, 1 is
-        int bluetooth_discoverable; // 0 is not in proximity, 1 is
         bdaddr_t *bluetooth_mac = new bdaddr_t;
         std::string wifi_mac;
 

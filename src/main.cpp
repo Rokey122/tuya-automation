@@ -50,25 +50,35 @@ int main(){
     int internet_state = 0;
     int bt_state = 0;
 
+    int retries = 1;
+
     daemon(1, 0);
 
     while (true){
-        if (bt){
-            bt_state = phone.bluetooth_checker();
-        }
+        for(int count = 0; count < retries; count++){
+            if (bt){
+                bt_state = phone.bluetooth_checker();
+            }
 
-        if (internet){
-            mtx.lock();
-            hosts_copy = hosts;
-            mtx.unlock();
+            if (internet){
+                mtx.lock();
+                hosts_copy = hosts;
+                mtx.unlock();
 
-            internet_state = phone.multi_wifi_checker(hosts_copy, iface);
+                internet_state = phone.multi_wifi_checker(hosts_copy, iface, lights.get_light_ip());
+            }
+            if ((internet_state == 1 || bt_state == 1) && 
+                retries == 10){
+                count = 0;
+            }
         }
         if(internet_state == 1 || bt_state == 1){
             lights.on_off_switch(1);
+            retries = 10;
         }
         else{
             lights.on_off_switch(0);
+            retries = 1;
         }
         sleep(1);
         

@@ -1,5 +1,10 @@
 #include "../header/light.hpp"
 
+/*********
+Bulb class
+*********/
+
+// constructor
 Bulb::Bulb(std::string id, std::string key, std::string ip, int switch_led_code){
     this->id = id;
     this->key = key;
@@ -7,6 +12,12 @@ Bulb::Bulb(std::string id, std::string key, std::string ip, int switch_led_code)
     this->switch_led_code = switch_led_code;
 }
 
+// return the bulbs ip
+std::string Bulb::get_bulb_ip(){
+    return this->ip;
+}
+
+// send on or off command to the bulb
 void Bulb::on_off_switch(int state){
     std::stringstream payload;
     tuyaAPI33 tuya;
@@ -37,21 +48,27 @@ void Bulb::on_off_switch(int state){
     }
 }
 
+/***********
+Lights class
+***********/
 
-
+// constructor
 Lights::Lights(const std::vector<Bulb> &bulbs){
     this->bulbs = bulbs;
     this->state = 0;
 }
 
-int Lights::get_state(){
-    return this->state;
+std::vector<std::string> Lights::get_light_ip(){
+    std::vector<std::string> bulb_ips;
+
+    for(auto bulb : this->bulbs){
+        bulb_ips.push_back(bulb.get_bulb_ip());
+    }
+
+    return bulb_ips;
 }
 
-void Lights::change_state(int val){
-    this->state = val;
-}
-
+// send on or off command to all the bulbs
 void Lights::on_off_switch(int state){
     if (this->state != state){
         for(auto bulb : this->bulbs){
