@@ -6,9 +6,11 @@ Constructor and destructor
 
 // constructor
 Phone::Phone(std::string bluetooth_mac_str, std::string wifi_mac){
-    str2ba(bluetooth_mac_str.c_str(), this->bluetooth_mac);
+    memset(&this->bluetooth_mac, 0, sizeof(this->bluetooth_mac));
+    this->bluetooth_mac.l2_family = AF_BLUETOOTH;
+    str2ba(bluetooth_mac_str.c_str(), &this->bluetooth_mac.l2_bdaddr);
+
     this->wifi_mac = wifi_mac;
-    this->dd = hci_open_dev(hci_get_route(NULL));
 
     this->pcap_dev = pcpp::PcapLiveDeviceList::getInstance().getPcapLiveDeviceByIpOrName(get_interface());
     this->pcap_source_mac = this->pcap_dev->getMacAddress();
@@ -17,8 +19,6 @@ Phone::Phone(std::string bluetooth_mac_str, std::string wifi_mac){
 
 // destructor
 Phone::~Phone(){
-    hci_close_dev(this->dd);
-    delete this->bluetooth_mac;
 }
 
 /*
@@ -60,13 +60,16 @@ Bluetooth functions
 
 // see whether a phone is in bluetooth proximity or not
 int Phone::bluetooth_checker(){
-    int &dd = this->dd;
+    int sock = socket(PF_BLUETOOTH, SOCK_RAW, BTPROTO_L2CAP);
  
-    if (hci_read_remote_name(dd, this->bluetooth_mac, 0, NULL, 25000) == 0){
+    if (connect(sock, (struct sockaddr *) &this->bluetooth_mac, sizeof(this->bluetooth_mac)) < 0) {
+		close(sock);
+        return 0;
+	}
+    else {
+        close(sock);
         return 1;
     }
-    else{
-        return 0;
-    }
+    close(sock);
     return -1;
 }

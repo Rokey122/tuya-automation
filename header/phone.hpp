@@ -2,6 +2,8 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/hci.h>
 #include <bluetooth/hci_lib.h>
+#include <bluetooth/l2cap.h>
+#include <sys/socket.h>
 #include <thread>
 #include "network.hpp"
 #include "IpAddress.h"
@@ -23,10 +25,8 @@ class Phone{
         int bluetooth_checker();
 
     private:
-        bdaddr_t *bluetooth_mac = new bdaddr_t;
+        struct sockaddr_l2 bluetooth_mac;
         std::string wifi_mac;
-
-        int dd;
 
         double pcap_response = 0.0;
         pcpp::PcapLiveDevice *pcap_dev;
