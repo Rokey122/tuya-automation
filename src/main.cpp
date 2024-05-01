@@ -74,7 +74,7 @@ int main(){
         }
         if(internet_state == 1 || bt_state == 1){
             lights.on_off_switch(1);
-            retries = 10;
+            retries = 20;
         }
         else{
             lights.on_off_switch(0);
